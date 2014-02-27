@@ -115,9 +115,16 @@ class FFmpegTestCase(unittest.TestCase):
 
     def test_stream_type_error(self):
         with self.assertRaisesRegexp(ValueError, 'z is an unsupported stream_type.'):
-            stream = Stream(stream_type='z')
+            Stream(stream_type='z')
 
+    def test_metadata(self):
+        stream = Stream()
+        stream.set_metadata("title", "Hello")
+        self.assertEqual(list(stream), ['-metadata', '"title=Hello"'])
 
+        stream = Stream(1, 'a')
+        stream.set_metadata("title", "Hello")
+        self.assertEqual(list(stream), ['-metadata:a:1', '"title=Hello"'])
 
     def tearDown(self):
         self.patcher.stop()

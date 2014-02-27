@@ -61,6 +61,12 @@ class Stream(ParameterContainer):
         else:
             return ':' + self.stream_type + ':' + str(self.stream_index)
 
+    def set_language(self, value):
+        self.set_metadata("language", value)
+
+    def set_metadata(self, key, value):
+        self.add_formatparam("-metadata", **{key: value})
+
     def add_parameter(self, key, value):
         self.container_list.append(Parameter(key + self.build_specifier(), value))
 
