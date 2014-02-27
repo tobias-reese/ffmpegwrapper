@@ -114,8 +114,9 @@ class FFmpegTestCase(unittest.TestCase):
         self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads:v', '0', '/new'])
 
     def test_stream_type_error(self):
-        with self.assertRaisesRegexp(ValueError, 'z is an unsupported stream_type.'):
+        with self.assertRaises(ValueError) as context:
             Stream(stream_type='z')
+        self.assertEqual(context.exception.message, 'z is an unsupported stream_type.')
 
     def test_metadata(self):
         stream = Stream()
