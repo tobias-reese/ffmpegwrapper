@@ -46,7 +46,7 @@ class Stream(ParameterContainer):
         """Currently only stream_index and stream_type[:stream_index] are supported."""
         stream_type_values = [None, 'a', 'v', 's', 'd', 't']
         if not stream_type in stream_type_values:
-            raise ValueError(str(stream_type) + " is a unsupported stream type.")
+            raise ValueError(str(stream_type) + " is an unsupported stream_type.")
         self.stream_index = stream_index
         self.stream_type = stream_type
         ParameterContainer.__init__(self, *args)
