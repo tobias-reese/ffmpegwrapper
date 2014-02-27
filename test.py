@@ -106,6 +106,12 @@ class FFmpegTestCase(unittest.TestCase):
         ffmpeg = FFmpeg('ffmpeg', input, output)
         self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads:v:1', '0', '/new'])
 
+        stream1 = Stream(stream_type='v')
+        stream1.add_parameter('-threads', '0')
+        output = Output('/new', stream1)
+
+        ffmpeg = FFmpeg('ffmpeg', input, output)
+        self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads:v', '0', '/new'])
     def tearDown(self):
         self.patcher.stop()
 

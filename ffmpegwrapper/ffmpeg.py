@@ -53,6 +53,8 @@ class Stream(ParameterContainer):
             return ''
         elif self.stream_type is None:
             return ':' + str(self.stream_index)
+        elif self.stream_index is None:
+            return ':' + self.stream_type
         else:
             return ':' + self.stream_type + ':' + str(self.stream_index)
 
