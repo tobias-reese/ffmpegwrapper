@@ -44,8 +44,11 @@ class Stream(ParameterContainer):
 
     def __init__(self, stream_index=None, stream_type=None, *args):
         """Currently only stream_index and stream_type[:stream_index] are supported."""
-        self.stream_index=stream_index
-        self.stream_type=stream_type
+        stream_type_values = [None, 'a', 'v', 's', 'd', 't']
+        if not stream_type in stream_type_values:
+            raise ValueError(str(stream_type) + " is a unsupported stream type.")
+        self.stream_index = stream_index
+        self.stream_type = stream_type
         ParameterContainer.__init__(self, *args)
 
     def build_specifier(self):

@@ -112,6 +112,13 @@ class FFmpegTestCase(unittest.TestCase):
 
         ffmpeg = FFmpeg('ffmpeg', input, output)
         self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads:v', '0', '/new'])
+
+    def test_stream_type_error(self):
+        with self.assertRaisesRegexp(ValueError, 'z is a unsupported stream type.'):
+            stream = Stream(stream_type='z')
+
+
+
     def tearDown(self):
         self.patcher.stop()
 
