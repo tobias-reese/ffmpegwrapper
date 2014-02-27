@@ -38,6 +38,28 @@ class Input(ParameterContainer):
                      ['-i', self.file_path])
 
 
+class Stream(ParameterContainer):
+    """Container for stream parameters.
+    """
+
+    def __init__(self, stream_index=None, stream_type=None, *args):
+        """Currently only stream_index and stream_type[:stream_index] are supported."""
+        self.stream_index=stream_index
+        self.stream_type=stream_type
+        ParameterContainer.__init__(self, *args)
+
+    def build_specifier(self):
+        if self.stream_index is None and self.stream_type is None:
+            return ''
+        elif self.stream_type is None:
+            return ':' + str(self.stream_index)
+        else:
+            return ':' + self.stream_type + ':' + str(self.stream_index)
+
+    def add_parameter(self, key, value):
+        self.container_list.append(Parameter(key + self.build_specifier(), value))
+
+
 class Output(ParameterContainer):
     """Container for an output file.
 

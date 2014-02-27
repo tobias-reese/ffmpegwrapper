@@ -6,6 +6,7 @@ from mock import patch
 
 from ffmpegwrapper import FFmpeg, Input, Output, \
     VideoCodec, AudioCodec, VideoFilter
+from ffmpegwrapper.ffmpeg import Stream
 from ffmpegwrapper.parameters import Parameter
 
 
@@ -80,6 +81,30 @@ class FFmpegTestCase(unittest.TestCase):
         with ffmpeg as process:
             result = list(process.readlines())
             self.assertEqual(result, ['this is a line', 'this too'])
+
+    def test_stream_specifier(self):
+        input = Input('/old')
+        stream1 = Stream()
+        stream1.add_parameter('-threads', '0')
+        output = Output('/new', stream1)
+
+        ffmpeg = FFmpeg('ffmpeg', input, output)
+        #ffmpeg.add_parameter('-threads', '0')
+        self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads', '0', '/new'])
+
+        stream1 = Stream(1)
+        stream1.add_parameter('-threads', '0')
+        output = Output('/new', stream1)
+
+        ffmpeg = FFmpeg('ffmpeg', input, output)
+        self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads:1', '0', '/new'])
+
+        stream1 = Stream(1, 'v')
+        stream1.add_parameter('-threads', '0')
+        output = Output('/new', stream1)
+
+        ffmpeg = FFmpeg('ffmpeg', input, output)
+        self.assertEqual(list(ffmpeg), ['ffmpeg', '-i', '/old', '-threads:v:1', '0', '/new'])
 
     def tearDown(self):
         self.patcher.stop()
