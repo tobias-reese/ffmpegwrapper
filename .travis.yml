@@ -16,7 +16,7 @@ before_install:
     - export PYTHONIOENCODING=UTF8
 
     - sudo apt-get update -qq
-    - apt-get install -qq python-sphinx
+    - sudo apt-get install -qq python-sphinx
 
 install: "pip install -r requirements.txt"
 
