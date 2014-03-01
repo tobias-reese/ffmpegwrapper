@@ -1,0 +1,637 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FFmpegWrapper &mdash; FFmpegWrapper 0.1-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FFmpegWrapper 0.1-dev documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">FFmpegWrapper 0.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-ffmpegwrapper">
+<span id="ffmpegwrapper"></span><h1>FFmpegWrapper<a class="headerlink" href="#module-ffmpegwrapper" title="Permalink to this headline">¶</a></h1>
+<p>FFmpegWrapper is a small wrapper for the ffmpeg encoder. You can append
+Codec, Filters and other ParameterContainer to the FFmpeg class and then
+run the resulting command.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ffmpegwrapper</span> <span class="kn">import</span> <span class="n">FFmpeg</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">VideoCodec</span><span class="p">,</span> <span class="n">VideoFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">videofilter</span> <span class="o">=</span> <span class="n">VideoFilter</span><span class="p">()</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">codec</span> <span class="o">=</span> <span class="n">VideoCodec</span><span class="p">(</span><span class="s">&#39;webm&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_video</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_video</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s">&#39;new&#39;</span><span class="p">,</span> <span class="n">videofilter</span><span class="p">,</span> <span class="n">codec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FFmpeg</span><span class="p">(</span><span class="s">&#39;ffmpeg&#39;</span><span class="p">,</span> <span class="n">input_video</span><span class="p">,</span> <span class="n">output_video</span><span class="p">)</span>
+<span class="go">&lt;FFmpeg [&#39;ffmpeg&#39;, &#39;-i&#39;, &#39;old&#39;, &#39;-vf&#39;, &#39;crop=300:200&#39;, &#39;-vcodec&#39;, &#39;webm&#39;, &#39;new&#39;]&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="parameter-and-containers">
+<h2>Parameter and Containers<a class="headerlink" href="#parameter-and-containers" title="Permalink to this headline">¶</a></h2>
+<p>An Parameter is a namedtuple which represents parameters of the FFmpeg command.</p>
+<p>Containers combines them. <a class="reference internal" href="#ffmpegwrapper.VideoFilter" title="ffmpegwrapper.VideoFilter"><tt class="xref py py-class docutils literal"><span class="pre">VideoFilter</span></tt></a> is for example a subclassed
+<tt class="xref py py-class docutils literal"><span class="pre">ParameterContainer</span></tt> which can contain some filters.</p>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ffmpegwrapper.FFmpeg">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">FFmpeg</tt><big>(</big><em>binary='ffmpeg'</em>, <em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.FFmpeg" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents the FFmpeg command.</p>
+<p>It behaves like a list. If you iterate over the object it will yield
+small parts from the ffmpeg command with it arguments. The arguments
+for the command are in the Parameter classes. They can be appended
+directly or through one or more Containers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>binary</strong> &#8211; The binary subprocess should execute at the <a class="reference internal" href="#ffmpegwrapper.FFmpeg.run" title="ffmpegwrapper.FFmpeg.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a></li>
+<li><strong>args</strong> &#8211; A list of Containers that should be appended</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="ffmpegwrapper.FFmpeg.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.FFmpeg.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the command of this object. Returns a
+<tt class="xref py py-class docutils literal"><span class="pre">FFmpegProcess</span></tt> object which have already the
+<tt class="xref py py-meth docutils literal"><span class="pre">FFmpegProcess.run()</span></tt> invoked.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">FFmpegProcess</span></tt> object with <cite>run()</cite> invoked</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ffmpegwrapper.ffmpeg.FFmpegProcess">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.ffmpeg.</tt><tt class="descname">FFmpegProcess</tt><big>(</big><em>command</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.ffmpeg.FFmpegProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to exectute FFmpeg.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>command</strong> &#8211; a sequence of the binary and it arguments</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="ffmpegwrapper.ffmpeg.FFmpegProcess.readlines">
+<tt class="descname">readlines</tt><big>(</big><em>keepends=False</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.ffmpeg.FFmpegProcess.readlines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield lines from the queue that were collected from the
+command. You can specify if you want to keep newlines at the ends.
+Default is to drop them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>keepends</strong> &#8211; keep the newlines at the end. Default=False</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.ffmpeg.FFmpegProcess.run">
+<tt class="descname">run</tt><big>(</big><em>daemon=True</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.ffmpeg.FFmpegProcess.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the command. A thread will be started to collect
+the outputs (stderr and stdout) from that command.
+The outputs will be written to the queue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="input-output">
+<h3>Input/Output<a class="headerlink" href="#input-output" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="ffmpegwrapper.Input">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">Input</tt><big>(</big><em>file_path</em>, <em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.Input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container for an input file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_path</strong> &#8211; Path to the input file</li>
+<li><strong>args</strong> &#8211; A list of Containers that should be appended</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="ffmpegwrapper.Output">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">Output</tt><big>(</big><em>file_path</em>, <em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.Output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container for an output file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_path</strong> &#8211; Path in which the file should be saved</li>
+<li><strong>args</strong> &#8211; A list of Containers that should be appended</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="ffmpegwrapper.Output.overwrite">
+<tt class="descname">overwrite</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.Output.overwrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite the file if it already exist</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="codecs">
+<h3>Codecs<a class="headerlink" href="#codecs" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="ffmpegwrapper.VideoCodec">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">VideoCodec</tt><big>(</big><em>name</em>, <em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec" title="Permalink to this definition">¶</a></dt>
+<dd><p>This represent an video codec.</p>
+<p>You can append this class to an <a class="reference internal" href="#ffmpegwrapper.Output" title="ffmpegwrapper.Output"><tt class="xref py py-class docutils literal"><span class="pre">Output</span></tt></a> object to tell
+which FFmpeg which codec you want.</p>
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.aspect">
+<tt class="descname">aspect</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.aspect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.bitrate">
+<tt class="descname">bitrate</tt><big>(</big><em>bitrate</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.bitrate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.bitrate_tolerance">
+<tt class="descname">bitrate_tolerance</tt><big>(</big><em>tolerance</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.bitrate_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.buffer_size">
+<tt class="descname">buffer_size</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.buffer_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.fps">
+<tt class="descname">fps</tt><big>(</big><em>fps</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.fps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.frames">
+<tt class="descname">frames</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.language">
+<tt class="descname">language</tt><big>(</big><em>lang</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.language" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.max_bitrate">
+<tt class="descname">max_bitrate</tt><big>(</big><em>rate</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.max_bitrate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.min_bitrate">
+<tt class="descname">min_bitrate</tt><big>(</big><em>rate</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.min_bitrate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.pass_number">
+<tt class="descname">pass_number</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.pass_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.preset">
+<tt class="descname">preset</tt><big>(</big><em>preset</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.preset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.same_quality">
+<tt class="descname">same_quality</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.same_quality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoCodec.size">
+<tt class="descname">size</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoCodec.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ffmpegwrapper.AudioCodec">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">AudioCodec</tt><big>(</big><em>name</em>, <em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec" title="Permalink to this definition">¶</a></dt>
+<dd><p>This represent an audio codec.</p>
+<p>You can append this class to an <a class="reference internal" href="#ffmpegwrapper.Output" title="ffmpegwrapper.Output"><tt class="xref py py-class docutils literal"><span class="pre">Output</span></tt></a> object to tell
+which FFmpeg which codec you want.</p>
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.bitrate">
+<tt class="descname">bitrate</tt><big>(</big><em>rate</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.bitrate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.channels">
+<tt class="descname">channels</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.frames">
+<tt class="descname">frames</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.frequence">
+<tt class="descname">frequence</tt><big>(</big><em>freq</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.frequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.language">
+<tt class="descname">language</tt><big>(</big><em>lang</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.language" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.preset">
+<tt class="descname">preset</tt><big>(</big><em>preset</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.preset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load default presets from a preset file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.AudioCodec.quality">
+<tt class="descname">quality</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioCodec.quality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="filters">
+<h3>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="ffmpegwrapper.VideoFilter">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">VideoFilter</tt><big>(</big><em>*containers</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>FilterContainer for Videofilters.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://ffmpeg.org/ffmpeg.html#Video-Filters">FFmpeg documentation, Videofilter</a></dt>
+<dd>Documentation of all filters and which effect they have.</dd>
+</dl>
+</div>
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.blackframe">
+<tt class="descname">blackframe</tt><big>(</big><em>amount</em>, <em>threshold</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.blackframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.copy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.crop">
+<tt class="descname">crop</tt><big>(</big><em>out_w</em>, <em>out_h=None</em>, <em>x=None</em>, <em>y=None</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.crop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.cropdetect">
+<tt class="descname">cropdetect</tt><big>(</big><em>limit=None</em>, <em>round=None</em>, <em>reset=None</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.cropdetect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.drawbox">
+<tt class="descname">drawbox</tt><big>(</big><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em>, <em>color</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.drawbox" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.drawtext">
+<tt class="descname">drawtext</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.drawtext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.fade">
+<tt class="descname">fade</tt><big>(</big><em>type</em>, <em>start</em>, <em>number</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.fade" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.fieldorder">
+<tt class="descname">fieldorder</tt><big>(</big><em>type</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.fieldorder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.fifo">
+<tt class="descname">fifo</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.fifo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.format">
+<tt class="descname">format</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.freior">
+<tt class="descname">freior</tt><big>(</big><em>name</em>, <em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.freior" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.gradfun">
+<tt class="descname">gradfun</tt><big>(</big><em>strength=''</em>, <em>radius=''</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.gradfun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.hflip">
+<tt class="descname">hflip</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.hflip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.hqdn3d">
+<tt class="descname">hqdn3d</tt><big>(</big><em>luma_sp=None</em>, <em>chroma_sp=None</em>, <em>luma_tmp=None</em>, <em>chroma_tmp=None</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.hqdn3d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.mp">
+<tt class="descname">mp</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.mp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.negate">
+<tt class="descname">negate</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.negate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.noformat">
+<tt class="descname">noformat</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.noformat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.null">
+<tt class="descname">null</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.null" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.overlay">
+<tt class="descname">overlay</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.overlay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.pad">
+<tt class="descname">pad</tt><big>(</big><em>width</em>, <em>height</em>, <em>x</em>, <em>y</em>, <em>color</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.pad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.scale">
+<tt class="descname">scale</tt><big>(</big><em>width=-1</em>, <em>height=-1</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.select">
+<tt class="descname">select</tt><big>(</big><em>expression</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.setdar">
+<tt class="descname">setdar</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.setdar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.setpts">
+<tt class="descname">setpts</tt><big>(</big><em>expression</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.setpts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.setsar">
+<tt class="descname">setsar</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.setsar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.slicify">
+<tt class="descname">slicify</tt><big>(</big><em>height=16</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.slicify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.transpose">
+<tt class="descname">transpose</tt><big>(</big><em>type</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.transpose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.unsharp">
+<tt class="descname">unsharp</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.unsharp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.vflip">
+<tt class="descname">vflip</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.vflip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.VideoFilter.yadif">
+<tt class="descname">yadif</tt><big>(</big><em>mode=0</em>, <em>parity=-1</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.VideoFilter.yadif" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ffmpegwrapper.AudioFilter">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.</tt><tt class="descname">AudioFilter</tt><big>(</big><em>*containers</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>FilterContainer for Audifilters.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://ffmpeg.org/ffmpeg.html#Audio-Filters">FFmpeg documentation, Audiofilter</a></dt>
+<dd>Documentation of all filters and which effect they have.</dd>
+</dl>
+</div>
+<dl class="method">
+<dt id="ffmpegwrapper.AudioFilter.null">
+<tt class="descname">null</tt><big>(</big><big>)</big><a class="headerlink" href="#ffmpegwrapper.AudioFilter.null" title="Permalink to this definition">¶</a></dt>
+<dd><p>does nothing</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="container-and-parameter">
+<h3>Container and Parameter<a class="headerlink" href="#container-and-parameter" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="ffmpegwrapper.parameters.Parameter">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.parameters.</tt><tt class="descname">Parameter</tt><a class="headerlink" href="#ffmpegwrapper.parameters.Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter(name, value)</p>
+<dl class="attribute">
+<dt id="ffmpegwrapper.parameters.Parameter.name">
+<tt class="descname">name</tt><a class="headerlink" href="#ffmpegwrapper.parameters.Parameter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ffmpegwrapper.parameters.Parameter.value">
+<tt class="descname">value</tt><a class="headerlink" href="#ffmpegwrapper.parameters.Parameter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ffmpegwrapper.parameters.ParameterContainer">
+<em class="property">class </em><tt class="descclassname">ffmpegwrapper.parameters.</tt><tt class="descname">ParameterContainer</tt><big>(</big><em>*containers</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.parameters.ParameterContainer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="ffmpegwrapper.parameters.ParameterContainer.add_formatparam">
+<tt class="descname">add_formatparam</tt><big>(</big><em>name</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.parameters.ParameterContainer.add_formatparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the value of an parameter from the <a href="#id1"><span class="problematic" id="id2">*</span></a>args <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs
+and append it to the container.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ffmpegwrapper.parameters.ParameterContainer.add_parameter">
+<tt class="descname">add_parameter</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#ffmpegwrapper.parameters.ParameterContainer.add_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an parameter to the container.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Copyright (c) 2012 by Mathias Koehler.</p>
+<p>Some rights reserved.</p>
+<p>Redistribution and use in source and binary forms of the software as well
+as documentation, with or without modification, are permitted provided
+that the following conditions are met:</p>
+<ul class="simple">
+<li>Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.</li>
+<li>Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided
+with the distribution.</li>
+<li>The names of the contributors may not be used to endorse or
+promote products derived from this software without specific
+prior written permission.</li>
+</ul>
+<p>THIS SOFTWARE AND DOCUMENTATION IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS &#8220;AS IS&#8221; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE AND DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGE.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FFmpegWrapper</a><ul>
+<li><a class="reference internal" href="#parameter-and-containers">Parameter and Containers</a></li>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#input-output">Input/Output</a></li>
+<li><a class="reference internal" href="#codecs">Codecs</a></li>
+<li><a class="reference internal" href="#filters">Filters</a></li>
+<li><a class="reference internal" href="#container-and-parameter">Container and Parameter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">FFmpegWrapper 0.1-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Mathias Koehler.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
