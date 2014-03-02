@@ -7,6 +7,9 @@ python:
 #  - "3.3"
 # command to install dependencies
 
+git:
+  submodules: false
+
 branches:
   only:
     - master
