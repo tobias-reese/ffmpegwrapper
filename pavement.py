@@ -50,6 +50,6 @@ def prepare_doc_dir():
     paths = _get_paths()
     paths.builddir
     if not exists(join(paths.builddir, "html", ".git")):
-        print "Hello"
+        sh('git submodule update --init --recursive')
 
 
