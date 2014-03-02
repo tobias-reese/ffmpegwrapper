@@ -75,3 +75,7 @@ def commit_doc():
     sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"", cwd=docdir)
     sh("git status", cwd=docdir)
     sh("git push -fq origin gh-pages", cwd=docdir)
+
+    sh("git add docs/build/html")
+    sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"")
+    sh("git push -fq origin gh-pages", cwd=docdir)
