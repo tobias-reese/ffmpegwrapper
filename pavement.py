@@ -64,10 +64,11 @@ def commit_doc():
     docdir = join(paths.builddir, "html")
     sh("git config --global user.email \"tobias-reese@users.noreply.github.com\"")
     sh("git config --global user.name \"Tobias Reese\"")
+    sh("git status", cwd=docdir)
     sh("git remote rm origin", cwd=docdir)
     sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
        + "@github.com/tobias-reese/ffmpegwrapper.git", cwd=docdir)
     sh("git add -f .", cwd=docdir)
     sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"", cwd=docdir)
     sh("git status", cwd=docdir)
-    sh("git push -f origin gh-pages", cwd=docdir)
+    sh("git push -fq origin gh-pages", cwd=docdir)
