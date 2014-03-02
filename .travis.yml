@@ -1,10 +1,12 @@
 language: python
 
+secure: "J9t3UOLooMJO5CmcHMGbQJYUZ00mRWIRbHEYCTvNezH8ILv1PkrzctCMMDaUAD/lTyjIxsQ1LnTkjFGeun3x6pFBQ9SYMqaAA7IEOjINomw4hMmzG9YSB4+TSu0nvRr/23FCggZje5T4OkL3kKcQa0TIWZv0VO1NAUdKlSKBWpM="
+
 python:
 #  - "2.6" disabled
   - "2.7"
-#  - "3.2"
-#  - "3.3"
+  - "3.2"
+  - "3.3"
 # command to install dependencies
 
 git:
