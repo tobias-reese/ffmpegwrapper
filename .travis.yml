@@ -22,7 +22,9 @@ before_install:
     - sudo apt-get install -qq python-sphinx
     - echo -e "Host *\n\tStrictHostKeyChecking no" >> ~/.ssh/config
 
-install: "pip install -r requirements.txt"
+install:
+    - pip install -r requirements.txt
+    - pip install -r requirements_dev.txt
 
 # command to run tests
 script:
