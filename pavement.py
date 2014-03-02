@@ -62,6 +62,8 @@ def commit_doc():
     options.order('sphinx', add_rest=True)
     paths = _get_paths()
     docdir = join(paths.builddir, "html")
+    sh("git config --global user.email \"tobias-reese@users.noreply.github.com\"")
+    sh("git config --global user.name \"Tobias Reese\"")
     sh("git remote rm origin", cwd=docdir)
     sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
        + "@github.com/tobias-reese/ffmpegwrapper.git", cwd=docdir)
