@@ -1,4 +1,4 @@
 [submodule "docs/build/html"]
 	path = docs/build/html
-	url = github.com:tobias-reese/ffmpegwrapper.git
+	url = https://github.com/tobias-reese/ffmpegwrapper.git
 	branch = gh-pages
