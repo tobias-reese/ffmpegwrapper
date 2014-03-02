@@ -54,7 +54,6 @@ def prepare_doc_dir():
         sh('git submodule update')
         sh('git checkout master')
         sh('git checkout gh-pages', cwd=join(paths.builddir, "html"))
-        sh('git status', cwd=join(paths.builddir, "html"))
 
 @task
 @needs('prepare_doc_dir', 'paver.doctools.html')
@@ -68,18 +67,16 @@ def commit_doc():
     docdir = join(paths.builddir, "html")
     sh("git config --global user.email \"tobias-reese@users.noreply.github.com\"")
     sh("git config --global user.name \"Tobias Reese\"")
-    sh("git status", cwd=docdir)
     sh("git remote rm origin", cwd=docdir)
     sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
-       + "@github.com/tobias-reese/ffmpegwrapper.git", cwd=docdir)
+       + "@github.com/tobias-reese/ffmpegwrapper.git", capture=True, cwd=docdir)
     sh("git add -f .", cwd=docdir)
     sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"", cwd=docdir)
-    sh("git status", cwd=docdir)
     sh("git push -fq origin gh-pages", cwd=docdir)
 
-    sh("git remote rm origin")
-    sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
-       + "@github.com/tobias-reese/ffmpegwrapper.git")
-    sh("git add docs/build/html")
-    sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"")
-    sh("git push -fq origin master")
+    # sh("git remote rm origin")
+    # sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
+    #    + "@github.com/tobias-reese/ffmpegwrapper.git", capture=True)
+    # sh("git add docs/build/html")
+    # sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to master\"")
+    # sh("git push -fq origin master")
