@@ -82,4 +82,4 @@ def commit_doc():
        + "@github.com/tobias-reese/ffmpegwrapper.git")
     sh("git add docs/build/html")
     sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"")
-    sh("git push -fq origin master", cwd=docdir)
+    sh("git push -fq origin master")
