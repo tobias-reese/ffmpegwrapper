@@ -32,4 +32,4 @@ install:
 script:
     - paver test
     - paver html
-    - paver commit_doc
+    - export GH_TOKEN; paver commit_doc
