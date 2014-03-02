@@ -66,7 +66,7 @@ def commit_doc():
     sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
        + "@github.com/tobias-reese/ffmpegwrapper.git", cwd=docdir)
     sh("git add -f .", cwd=docdir)
-    sh("git commit -m Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages", cwd=docdir)
+    sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"", cwd=docdir)
     sh("git push -fq origin gh-pages", cwd=docdir)
 
 
