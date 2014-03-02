@@ -1,7 +1,7 @@
 language: python
 
 env:
-  secure: "J9t3UOLooMJO5CmcHMGbQJYUZ00mRWIRbHEYCTvNezH8ILv1PkrzctCMMDaUAD/lTyjIxsQ1LnTkjFGeun3x6pFBQ9SYMqaAA7IEOjINomw4hMmzG9YSB4+TSu0nvRr/23FCggZje5T4OkL3kKcQa0TIWZv0VO1NAUdKlSKBWpM="
+  secure: "W/tCeyeLLrkWtavS+91FsdDll20geGIq/JSULgtr2wpJhqo20ZoyIOwWVlamqpzMvIVAs3wBbOuci3FVxgUJMKi+4eSAsHw4TOrkeNfxdzTKVeOgrZjHSvS/BC7t4ViQbzLjYqjO5rysl23Wt6hoc1YEFUGaF0aNL8RFz0j52+A="
 
 python:
 #  - "2.6" disabled
