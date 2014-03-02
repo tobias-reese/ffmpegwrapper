@@ -69,4 +69,5 @@ def commit_doc():
        + "@github.com/tobias-reese/ffmpegwrapper.git", cwd=docdir)
     sh("git add -f .", cwd=docdir)
     sh("git commit -m \"Travis build " + environ['TRAVIS_BUILD_NUMBER'] + " pushed to gh-pages\"", cwd=docdir)
+    sh("git status", cwd=docdir)
     sh("git push -f origin gh-pages", cwd=docdir)
