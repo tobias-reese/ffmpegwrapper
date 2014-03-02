@@ -51,6 +51,7 @@ def prepare_doc_dir():
     paths = _get_paths()
     if not exists(join(paths.builddir, "html", ".git")):
         sh('git submodule update --init --recursive')
+        sh('git status', cwd=join(paths.builddir, "html"))
 
 @task
 @needs('prepare_doc_dir', 'paver.doctools.html')
