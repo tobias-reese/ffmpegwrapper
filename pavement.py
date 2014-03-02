@@ -52,4 +52,10 @@ def prepare_doc_dir():
     if not exists(join(paths.builddir, "html", ".git")):
         sh('git submodule update --init --recursive')
 
+@task
+@needs('prepare_doc_dir', 'paver.doctools.html')
+def html():
+    pass
+
+
 
