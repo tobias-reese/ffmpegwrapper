@@ -1,3 +1,5 @@
+from os.path import exists, join
+from paver.doctools import _get_paths
 from paver.easy import *
 import paver.doctools
 from paver.setuputils import setup
@@ -40,5 +42,14 @@ options(
 def doc_clean():
     """Make sure clean does not delete anything"""
     pass
+
+@task
+def prepare_doc_dir():
+    """Make sure doc dir is correctly initialized."""
+    options.order('sphinx', add_rest=True)
+    paths = _get_paths()
+    paths.builddir
+    if not exists(join(paths.builddir, "html", ".git")):
+        print "Hello"
 
 
