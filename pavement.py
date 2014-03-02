@@ -52,6 +52,7 @@ def prepare_doc_dir():
     if not exists(join(paths.builddir, "html", ".git")):
         sh('git submodule init')
         sh('git submodule update')
+        sh('git checkout master')
         sh('git checkout gh-pages', cwd=join(paths.builddir, "html"))
         sh('git status', cwd=join(paths.builddir, "html"))
 
