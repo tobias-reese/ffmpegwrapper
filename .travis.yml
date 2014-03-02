@@ -5,8 +5,8 @@ secure: "J9t3UOLooMJO5CmcHMGbQJYUZ00mRWIRbHEYCTvNezH8ILv1PkrzctCMMDaUAD/lTyjIxsQ
 python:
 #  - "2.6" disabled
   - "2.7"
-  - "3.2"
-  - "3.3"
+#  - "3.2"
+#  - "3.3"
 # command to install dependencies
 
 git:
@@ -32,3 +32,4 @@ install:
 script:
     - paver test
     - paver html
+    - paver commit_doc

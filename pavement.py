@@ -1,3 +1,4 @@
+from os import environ
 from os.path import exists, join
 from paver.doctools import _get_paths
 from paver.easy import *
@@ -48,7 +49,6 @@ def prepare_doc_dir():
     """Make sure doc dir is correctly initialized."""
     options.order('sphinx', add_rest=True)
     paths = _get_paths()
-    paths.builddir
     if not exists(join(paths.builddir, "html", ".git")):
         sh('git submodule update --init --recursive')
 
@@ -56,6 +56,15 @@ def prepare_doc_dir():
 @needs('prepare_doc_dir', 'paver.doctools.html')
 def html():
     pass
+
+@task
+def commit_doc():
+    options.order('sphinx', add_rest=True)
+    paths = _get_paths()
+    docdir = join(paths.builddir, "html")
+    sh("git remote rm origin", cwd=docdir)
+    sh("git remote add origin https://tobias-reese:" + environ['GH_TOKEN']
+       + "@github.com/tobias-reese/ffmpegwrapper.git", cwd=docdir)
 
 
 
