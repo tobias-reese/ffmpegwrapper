@@ -62,11 +62,15 @@ class Stream(ParameterContainer):
             return ':' + self.stream_type + ':' + str(self.stream_index)
 
     def set_language(self, value):
-        self.set_metadata("language", value)
+        self.set_metadataWithStreamSpecifier("language", value, 's')
 
     def set_metadata(self, key, value):
         """Currently only per stream metadata is supported here"""
         self.add_formatparam("-metadata", **{key: value})
+
+    def set_metadataWithStreamSpecifier(self, key, value, specifier):
+        """Currently only per stream metadata is supported here"""
+        self.add_formatparam("-metadata:" + specifier, **{key: value})
 
     def add_mapping(self, map):
         self.add_parameter('-map', map)
@@ -113,21 +117,15 @@ class FFmpegProcess(object):
     def _queue_output(self, out, queue):
         """Read the output from the command bytewise. On every newline
         the line is put to the queue."""
-        line = ''
         running = self.process.poll() is None
 
         while running:
-
-            chunk = out.read(1) # .decode('utf-8')
-            print repr(chunk)
-            chunk = chunk.decode('utf-8')
+            chunk = out.readline()
+            chunk = chunk.decode('utf8')
             if chunk == '':
                 running = self.process.poll() is None
                 continue
-            line += chunk
-            if chunk in ('\n', '\r'):
-                queue.put(line, timeout=0.4)
-                line = ''
+            queue.put(chunk, timeout=0.4)
         out.close()
 
     def run(self, daemon=True):
