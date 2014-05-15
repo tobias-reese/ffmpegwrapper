@@ -120,12 +120,14 @@ class FFmpegProcess(object):
         running = self.process.poll() is None
 
         while running:
-            chunk = out.readline()
-            chunk = chunk.decode('utf8')
+            chunk = out.read(1)
             if chunk == '':
                 running = self.process.poll() is None
                 continue
-            queue.put(chunk, timeout=0.4)
+            line += chunk
+            if chunk in ('\n', '\r'):
+                queue.put(line.decode('utf8'), timeout=0.4)
+                line = ''
         out.close()
 
     def run(self, daemon=True):
