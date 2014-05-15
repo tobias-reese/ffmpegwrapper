@@ -62,7 +62,7 @@ class Stream(ParameterContainer):
             return ':' + self.stream_type + ':' + str(self.stream_index)
 
     def set_language(self, value):
-        self.set_metadataWithStreamSpecifier("language", value, 's')
+        self.set_metadataWithStreamSpecifier("language", value, 'a')
 
     def set_metadata(self, key, value):
         """Currently only per stream metadata is supported here"""
@@ -70,7 +70,7 @@ class Stream(ParameterContainer):
 
     def set_metadataWithStreamSpecifier(self, key, value, specifier):
         """Currently only per stream metadata is supported here"""
-        self.add_formatparam("-metadata:" + specifier, **{key: value})
+        self.add_formatparam("-metadata:s:" + specifier, **{key: value})
 
     def add_mapping(self, map):
         self.add_parameter('-map', map)
