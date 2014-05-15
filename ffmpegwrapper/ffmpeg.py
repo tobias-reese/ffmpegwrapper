@@ -118,6 +118,7 @@ class FFmpegProcess(object):
         """Read the output from the command bytewise. On every newline
         the line is put to the queue."""
         running = self.process.poll() is None
+        line = ''
 
         while running:
             chunk = out.read(1)
