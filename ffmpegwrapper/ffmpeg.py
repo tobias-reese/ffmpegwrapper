@@ -65,10 +65,18 @@ class Stream(ParameterContainer):
         self.set_metadata("language", value)
 
     def set_metadata(self, key, value):
-        self.add_formatparam("-metadata", **{key: value})
+        """Currently only per stream metadata is supported here"""
+        self.add_formatparam("-metadata:s", **{key: value})
+
+    def add_mapping(self, map):
+        self.add_parameter('-map', map)
 
     def add_parameter(self, key, value):
-        self.container_list.append(Parameter(key + self.build_specifier(), value))
+        blacklist = ['-map']
+        if key in blacklist:
+            self.container_list.append(Parameter(key, value))
+        else:
+            self.container_list.append(Parameter(key + self.build_specifier(), value))
 
 
 class Output(ParameterContainer):
