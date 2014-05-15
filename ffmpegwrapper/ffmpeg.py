@@ -117,7 +117,10 @@ class FFmpegProcess(object):
         running = self.process.poll() is None
 
         while running:
+
             chunk = out.read(1) # .decode('utf-8')
+            print repr(chunk)
+            chunk = chunk.decode('utf-8')
             if chunk == '':
                 running = self.process.poll() is None
                 continue
