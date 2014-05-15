@@ -66,7 +66,7 @@ class Stream(ParameterContainer):
 
     def set_metadata(self, key, value):
         """Currently only per stream metadata is supported here"""
-        self.add_formatparam("-metadata:s", **{key: value})
+        self.add_formatparam("-metadata", **{key: value})
 
     def add_mapping(self, map):
         self.add_parameter('-map', map)
